@@ -1,0 +1,8 @@
+// Configure Programm installer
+./configure
+// For compile & install
+make build
+// For install
+make install
+// For clean
+make clean 

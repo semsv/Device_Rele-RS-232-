@@ -1,0 +1,40 @@
+#/bin/sh
+##########################################################################
+# Исполняемый Файл Конфигурация к программе Rele v1.0
+# Автор: Севастьянов Семен Владимирович
+# Дата: 27 мая 2019 года
+# Дата последнего изменения: 27 мая 2019 
+# Как пользоваться данным файлом: выполните команду: ./configure
+# Наслаждайтесь!!! 
+##########################################################################
+echo "*******************************************************************"
+echo -e "\e[35m************ Welcome to configure file Device Rele v1.0 ***********\e[0m"
+echo "*******************************************************************"
+# Проверяем существует ли модуль ядра устройства преобразователя USB-TO-SERIAL (CH341)
+if ! [ -f /lib/modules/"$(uname -r)"/kernel/drivers/usb/serial/ch341.ko ]; then
+  echo -n "Check drivers for usb-to-serial-converter....................."
+  echo -e "\e[31m[FAIL]\e[0m"
+else
+  echo -n "Check drivers for usb-to-serial-converter....................."
+  echo -e "\e[32m[OK]\e[0m"
+fi
+# Теперь проверим что модуль загружен, если загружен то выгружаем и загружаем (перезагрузка), иначе просто загружаем
+if [ "$(lsmod | grep -i ch341 | grep -i usbserial 2>/dev/null)"  == "" ]; then 
+  insmod /lib/modules/"$(uname -r)"/kernel/drivers/usb/serial/ch341.ko
+else
+  rmmod ch341 
+  insmod /lib/modules/"$(uname -r)"/kernel/drivers/usb/serial/ch341.ko
+fi  
+echo -n "********* "
+echo -n -e "\e[33m$(lsmod | grep -i ch341 | grep -i usbserial)\e[0m" 
+echo " **********"
+echo -n "Check drivers correct load.................................................."
+
+if [ "$(lsmod | grep -i ch341 | grep -i usbserial 2>/dev/null)"  != "" ]; then   
+  echo -e "\e[32m[OK]\e[0m"
+  cp -r Makefile.in Makefile
+  echo "Now Makefile is Ready!"
+else
+  echo -e "\e[31m[FAIL]\e[0m"
+  rm Makefile
+fi
