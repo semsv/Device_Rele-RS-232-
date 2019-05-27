@@ -1,9 +1,7 @@
 all:
 	gcc rs-232.c -o rele
 	cp -r rele /bin/rele
-	chmod a+rwx /bin/rele	
-	rmmod ch341.ko 2>/dev/null
-	insmod Drivers/ch341.ko
+	chmod a+rwx /bin/rele		
 	sh settch341.sh
 build:
 	gcc rs-232.c -o rele
